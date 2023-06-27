@@ -8,19 +8,27 @@ import {
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Platform,
+	ImageBackground,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
 
 const initialCredentials = {
+	login: "",
 	email: "",
 	password: "",
 };
 
-export default function LoginScreen() {
+export default function RegistrationScreen() {
 	const [credentials, setCredentials] = useState(initialCredentials);
 	const [isPasswordSecured, setIsPasswordSecured] = useState(true);
 	const [isKeyboardShown, setisKeyboardShown] = useState(false);
+	const [isLoginActive, setIsLoginActive] = useState(false);
 	const [isEmailActive, setIsEmailActive] = useState(false);
 	const [isPasswordActive, setIsPasswordActive] = useState(false);
+
+	const navigation = useNavigation();
 
 	const togglePasswordSecure = () => {
 		setIsPasswordSecured(!isPasswordSecured);
@@ -30,13 +38,45 @@ export default function LoginScreen() {
 		setisKeyboardShown(false);
 	};
 
-	
-
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
-			<View style={styles.loginContainer}>
-				<Text style={styles.formTitle}>Login</Text>
+		<ImageBackground
+			source={require("../../assets/wallpapers.png")}
+			resizeMode="cover"
+			style={styles.background}
+		>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				style={styles.container}
+			>
+				<View style={styles.photoContainer}>
+					<Ionicons
+						name="add-circle-outline"
+						size={25}
+						style={styles.addPhotoBtn}
+					/>
+				</View>
+				<Text style={styles.formTitle}>Registration</Text>
 				<View style={styles.form}>
+					<TextInput
+						style={[styles.input, isLoginActive && styles.inputActive]}
+						selectionColor="#FF6C00"
+						onChangeText={(value) =>
+							setCredentials((prevProps) => ({
+								...prevProps,
+								login: value,
+							}))
+						}
+						onFocus={() => {
+							setisKeyboardShown(true);
+							setIsLoginActive(true);
+						}}
+						onBlur={() => {
+							setIsLoginActive(false);
+							handleBlur();
+						}}
+						value={credentials.login}
+						placeholder="Login"
+					/>
 					<TextInput
 						style={[styles.input, isEmailActive && styles.inputActive]}
 						onChangeText={(value) =>
@@ -102,58 +142,76 @@ export default function LoginScreen() {
 					style={styles.button}
 					onPress={() =>
 						console.log(
-							`Email: ${credentials.email} Password: ${credentials.password}`
+							`Login: ${credentials.login} Email: ${credentials.email} Password: ${credentials.password}`
 						)
 					}
 				>
-					<Text style={styles.buttonText}>Login</Text>
+					<Text style={styles.buttonText}>Sign up</Text>
 				</TouchableOpacity>
 				<View
 					style={{
 						flexDirection: "row",
-						marginBottom: isKeyboardShown ? -90 : 78,
+						marginBottom: isKeyboardShown ? -1 : 78,
 					}}
 				>
-					<Text style={styles.haveAccountText}>Don't have an account? </Text>
-					<Pressable>
-						<Text style={styles.haveAccountText}>Register</Text>
+					<Text style={styles.haveAccountText}>Already have an account? </Text>
+					<Pressable onPress={() => navigation.navigate("Login")}>
+						<Text style={styles.haveAccountText}>Login</Text>
 					</Pressable>
 				</View>
-			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</ImageBackground>
 	);
 }
 
 const styles = StyleSheet.create({
-	form: {
-		marginTop: "auto",
-		marginBottom: 43,
-		width: "100%",
+	background: {
+		flex: 1,
+		justifyContent: "flex-end",
 	},
-	loginContainer: {
+	container: {
+		marginTop: "auto",
 		backgroundColor: "#fff",
 		paddingHorizontal: 16,
 		alignItems: "center",
+		position: "relative",
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
+	photoContainer: {
+		position: "absolute",
+		backgroundColor: "#F6F6F6",
+		width: 120,
+		height: 120,
+		top: -60,
+		borderRadius: 16,
+	},
+	addPhotoBtn: {
+		color: "#FF6C00",
+		top: 81,
+		left: 107,
+	},
 	formTitle: {
-		marginTop: 32,
+		marginTop: 92,
 		marginBottom: 33,
 		fontFamily: "Roboto-Medium",
 		fontSize: 30,
+	},
+	form: {
+		marginBottom: 43,
+		width: "100%",
 	},
 	input: {
 		fontFamily: "Roboto-Regular",
 		color: "#000",
 		height: 50,
+		marginBottom: 16,
 		paddingHorizontal: 16,
 		width: "100%",
 		fontSize: 16,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderRadius: 8,
-		marginBottom: 16,
 		backgroundColor: "#F6F6F6",
 		borderColor: "#E8E8E8",
 	},
@@ -187,7 +245,7 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		fontFamily: "Roboto-Regular",
-		color: "#1B4371"
+		color: "#1B4371",
 	},
 	button: {
 		alignItems: "center",

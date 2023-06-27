@@ -6,24 +6,25 @@ import {
 	Text,
 	Pressable,
 	TouchableOpacity,
-	Image,
 	KeyboardAvoidingView,
 	Platform,
+	ImageBackground,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const initialCredentials = {
-	login: "",
 	email: "",
 	password: "",
 };
 
-export default function RegistrationScreen() {
+export default function LoginScreen() {
 	const [credentials, setCredentials] = useState(initialCredentials);
 	const [isPasswordSecured, setIsPasswordSecured] = useState(true);
 	const [isKeyboardShown, setisKeyboardShown] = useState(false);
-	const [isLoginActive, setIsLoginActive] = useState(false);
 	const [isEmailActive, setIsEmailActive] = useState(false);
 	const [isPasswordActive, setIsPasswordActive] = useState(false);
+
+	const navigation = useNavigation();
 
 	const togglePasswordSecure = () => {
 		setIsPasswordSecured(!isPasswordSecured);
@@ -34,39 +35,17 @@ export default function RegistrationScreen() {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
+		<ImageBackground
+			source={require("../../assets/wallpapers.png")}
+			resizeMode="cover"
+			style={styles.background}
 		>
-			<View style={styles.registrationContainer}>
-				<View style={styles.photoContainer}>
-					<Image
-						style={styles.addPhotoBtn}
-						source={require("../assets/add.png")}
-						resizeMode="cover"
-					/>
-				</View>
-				<Text style={styles.formTitle}>Registration</Text>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" && "padding"}
+				style={styles.container}
+			>
+				<Text style={styles.formTitle}>Login</Text>
 				<View style={styles.form}>
-					<TextInput
-						style={[styles.input, isLoginActive && styles.inputActive]}
-						selectionColor="#FF6C00"
-						onChangeText={(value) =>
-							setCredentials((prevProps) => ({
-								...prevProps,
-								login: value,
-							}))
-						}
-						onFocus={() => {
-							setisKeyboardShown(true);
-							setIsLoginActive(true);
-						}}
-						onBlur={() => {
-							setIsLoginActive(false);
-							handleBlur();
-						}}
-						value={credentials.login}
-						placeholder="Login"
-					/>
 					<TextInput
 						style={[styles.input, isEmailActive && styles.inputActive]}
 						onChangeText={(value) =>
@@ -132,73 +111,63 @@ export default function RegistrationScreen() {
 					style={styles.button}
 					onPress={() =>
 						console.log(
-							`Login: ${credentials.login} Email: ${credentials.email} Password: ${credentials.password}`
+							`Email: ${credentials.email} Password: ${credentials.password}`
 						)
 					}
 				>
-					<Text style={styles.buttonText}>Sign up</Text>
+					<Text style={styles.buttonText}>Login</Text>
 				</TouchableOpacity>
 				<View
 					style={{
 						flexDirection: "row",
-						marginBottom: isKeyboardShown ? -90 : 78,
+						marginBottom: isKeyboardShown ? -1 : 78,
 					}}
 				>
-					<Text style={styles.haveAccountText}>Already have an account? </Text>
-					<Pressable>
-						<Text style={styles.haveAccountText}>Login</Text>
+					<Text style={styles.haveAccountText}>Don't have an account? </Text>
+					<Pressable onPress={() => navigation.navigate("Registration")}>
+						<Text style={styles.haveAccountText}>Register</Text>
 					</Pressable>
 				</View>
-			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</ImageBackground>
 	);
 }
 
 const styles = StyleSheet.create({
-	registrationContainer: {
+	background: {
+		flex: 1,
+		justifyContent: "flex-end",
+	},
+	container: {
 		marginTop: "auto",
 		backgroundColor: "#fff",
 		paddingHorizontal: 16,
 		alignItems: "center",
-		position: "relative",
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
-	photoContainer: {
-		position: "absolute",
-		backgroundColor: "#F6F6F6",
-		width: 120,
-		height: 120,
-		top: -60,
-		borderRadius: 16,
-	},
-	addPhotoBtn: {
-		width: 25,
-		height: 25,
-		top: 81,
-		left: 107,
+	form: {
+		marginTop: "auto",
+		marginBottom: 43,
+		width: "100%",
 	},
 	formTitle: {
-		marginTop: 92,
+		marginTop: 32,
 		marginBottom: 33,
 		fontFamily: "Roboto-Medium",
 		fontSize: 30,
-	},
-	form: {
-		marginBottom: 43,
-		width: "100%",
 	},
 	input: {
 		fontFamily: "Roboto-Regular",
 		color: "#000",
 		height: 50,
-		marginBottom: 16,
 		paddingHorizontal: 16,
 		width: "100%",
 		fontSize: 16,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderRadius: 8,
+		marginBottom: 16,
 		backgroundColor: "#F6F6F6",
 		borderColor: "#E8E8E8",
 	},
