@@ -10,11 +10,12 @@ const MainTab = createBottomTabNavigator();
 
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
-import HomeScreen from "./screens/HomeScreen";
+import HomeScreen from "./screens/main/HomeScreen";
 import CreatePostScreen from "./screens/main/CreatePostsScreen";
-import PostsScreen from "./screens/main/PostsScreen";
 import ProfileScreen from "./screens/main/ProfileScreen";
-
+import MapScreen from "./screens/main/nestedScreens/MapScreen";
+import PostsScreen from "./screens/main/nestedScreens/PostsScreen";
+import CommentsScreen from "./screens/main/nestedScreens/CommentsScreen";
 
 const useRoute = (isAuth) => {
 	if (!isAuth) {
@@ -36,10 +37,11 @@ const useRoute = (isAuth) => {
 	return (
 		<MainTab.Navigator>
 			<MainTab.Screen
-				name="Posts"
-				component={PostsScreen}
+				name="Home"
+				component={HomeScreen}
 				options={{
 					tabBarShowLabel: false,
+					headerShown: false,
 					tabBarIcon: ({ focused, size, color }) => (
 						<SimpleLineIcons name="grid" size={24} color="black" />
 					),
@@ -50,6 +52,7 @@ const useRoute = (isAuth) => {
 				component={CreatePostScreen}
 				options={{
 					tabBarShowLabel: false,
+					title: "Create post",
 					tabBarIcon: ({ focused, size, color }) => (
 						<View style={styles.addButton}>
 							<Ionicons name="md-add-outline" size={24} color="#FFFFFF" />
@@ -72,15 +75,17 @@ const useRoute = (isAuth) => {
 };
 
 const styles = StyleSheet.create({
-    addButton: {
-        backgroundColor: "#FF6C00",
-        width: 70,
-        height: 40,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 20,
-    },
-})
+	addButton: {
+		backgroundColor: "#FF6C00",
+		width: 70,
+		height: 40,
+		alignItems: "center",
+		justifyContent: "center",
+		borderRadius: 20,
+	},
+	headerStyle: {
+		marginHorizontal: 10,
+	},
+});
 
 export default useRoute;
-

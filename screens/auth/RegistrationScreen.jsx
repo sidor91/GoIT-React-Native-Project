@@ -9,6 +9,8 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ImageBackground,
+	Keyboard,
+	TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,138 +40,154 @@ export default function RegistrationScreen() {
 		setisKeyboardShown(false);
 	};
 
+	const onKeyboardClose = () => {
+		Keyboard.dismiss();
+	};
+
 	return (
-		<ImageBackground
-			source={require("../../assets/wallpapers.png")}
-			resizeMode="cover"
-			style={styles.background}
+		<TouchableWithoutFeedback
+			onPress={onKeyboardClose}
+			// onLayout={onLayoutRootView}
 		>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				style={styles.container}
-			>
-				<View style={styles.photoContainer}>
-					<Ionicons
-						name="add-circle-outline"
-						size={25}
-						style={styles.addPhotoBtn}
-					/>
-				</View>
-				<Text style={styles.formTitle}>Registration</Text>
-				<View style={styles.form}>
-					<TextInput
-						style={[styles.input, isLoginActive && styles.inputActive]}
-						selectionColor="#FF6C00"
-						onChangeText={(value) =>
-							setCredentials((prevProps) => ({
-								...prevProps,
-								login: value,
-							}))
-						}
-						onFocus={() => {
-							setisKeyboardShown(true);
-							setIsLoginActive(true);
-						}}
-						onBlur={() => {
-							setIsLoginActive(false);
-							handleBlur();
-						}}
-						value={credentials.login}
-						placeholder="Login"
-					/>
-					<TextInput
-						style={[styles.input, isEmailActive && styles.inputActive]}
-						onChangeText={(value) =>
-							setCredentials((prevProps) => ({
-								...prevProps,
-								email: value,
-							}))
-						}
-						onFocus={() => {
-							setisKeyboardShown(true);
-							setIsEmailActive(true);
-						}}
-						onBlur={() => {
-							setIsEmailActive(false);
-							handleBlur();
-						}}
-						value={credentials.email}
-						placeholder="Email"
-						selectionColor="#FF6C00"
-					/>
-					<View
-						style={[
-							styles.passwordContainer,
-							isPasswordActive && styles.passwordContainerActive,
-						]}
+			<View style={styles.container}>
+				<ImageBackground
+					source={require("../../assets/wallpapers.png")}
+					resizeMode="cover"
+					style={styles.background}
+				>
+					<KeyboardAvoidingView
+						behavior={Platform.OS === "ios" ? "padding" : "height"}
+						style={styles.innerContainer}
 					>
-						<TextInput
-							style={[
-								styles.passwordInput,
-								isPasswordActive && styles.passwordContainerActive,
-							]}
-							onChangeText={(value) =>
-								setCredentials((prevProps) => ({
-									...prevProps,
-									password: value,
-								}))
-							}
-							onFocus={() => {
-								setisKeyboardShown(true);
-								setIsPasswordActive(true);
-							}}
-							onBlur={() => {
-								setIsPasswordActive(false);
-								handleBlur();
-							}}
-							value={credentials.password}
-							placeholder="Password"
-							secureTextEntry={isPasswordSecured}
-							selectionColor="#FF6C00"
-						/>
-						<Pressable>
-							<Text
-								style={styles.verifyButtonText}
-								onPress={togglePasswordSecure}
-								styles={styles.haveAccountText}
+						<View style={styles.photoContainer}>
+							<Ionicons
+								name="add-circle-outline"
+								size={25}
+								style={styles.addPhotoBtn}
+							/>
+						</View>
+						<Text style={styles.formTitle}>Registration</Text>
+						<View style={styles.form}>
+							<TextInput
+								style={[styles.input, isLoginActive && styles.inputActive]}
+								selectionColor="#FF6C00"
+								onChangeText={(value) =>
+									setCredentials((prevProps) => ({
+										...prevProps,
+										login: value,
+									}))
+								}
+								onFocus={() => {
+									setisKeyboardShown(true);
+									setIsLoginActive(true);
+								}}
+								onBlur={() => {
+									setIsLoginActive(false);
+									handleBlur();
+								}}
+								value={credentials.login}
+								placeholder="Login"
+							/>
+							<TextInput
+								style={[styles.input, isEmailActive && styles.inputActive]}
+								onChangeText={(value) =>
+									setCredentials((prevProps) => ({
+										...prevProps,
+										email: value,
+									}))
+								}
+								onFocus={() => {
+									setisKeyboardShown(true);
+									setIsEmailActive(true);
+								}}
+								onBlur={() => {
+									setIsEmailActive(false);
+									handleBlur();
+								}}
+								value={credentials.email}
+								placeholder="Email"
+								selectionColor="#FF6C00"
+							/>
+							<View
+								style={[
+									styles.passwordContainer,
+									isPasswordActive && styles.passwordContainerActive,
+								]}
 							>
-								{isPasswordSecured ? "Show" : "Hide"}
+								<TextInput
+									style={[
+										styles.passwordInput,
+										isPasswordActive && styles.passwordContainerActive,
+									]}
+									onChangeText={(value) =>
+										setCredentials((prevProps) => ({
+											...prevProps,
+											password: value,
+										}))
+									}
+									onFocus={() => {
+										setisKeyboardShown(true);
+										setIsPasswordActive(true);
+									}}
+									onBlur={() => {
+										setIsPasswordActive(false);
+										handleBlur();
+									}}
+									value={credentials.password}
+									placeholder="Password"
+									secureTextEntry={isPasswordSecured}
+									selectionColor="#FF6C00"
+								/>
+								<Pressable>
+									<Text
+										style={styles.verifyButtonText}
+										onPress={togglePasswordSecure}
+										styles={styles.haveAccountText}
+									>
+										{isPasswordSecured ? "Show" : "Hide"}
+									</Text>
+								</Pressable>
+							</View>
+						</View>
+						<TouchableOpacity
+							style={styles.button}
+							onPress={() =>
+								console.log(
+									`Login: ${credentials.login} Email: ${credentials.email} Password: ${credentials.password}`
+								)
+							}
+						>
+							<Text style={styles.buttonText}>Sign up</Text>
+						</TouchableOpacity>
+						<View
+							style={{
+								flexDirection: "row",
+								marginBottom: isKeyboardShown ? -1 : 78,
+							}}
+						>
+							<Text style={styles.haveAccountText}>
+								Already have an account?{" "}
 							</Text>
-						</Pressable>
-					</View>
-				</View>
-				<TouchableOpacity
-					style={styles.button}
-					onPress={() =>
-						console.log(
-							`Login: ${credentials.login} Email: ${credentials.email} Password: ${credentials.password}`
-						)
-					}
-				>
-					<Text style={styles.buttonText}>Sign up</Text>
-				</TouchableOpacity>
-				<View
-					style={{
-						flexDirection: "row",
-						marginBottom: isKeyboardShown ? -1 : 78,
-					}}
-				>
-					<Text style={styles.haveAccountText}>Already have an account? </Text>
-					<Pressable onPress={() => navigation.navigate("Login")}>
-						<Text style={styles.haveAccountText}>Login</Text>
-					</Pressable>
-				</View>
-			</KeyboardAvoidingView>
-		</ImageBackground>
+							<Pressable onPress={() => navigation.navigate("Login")}>
+								<Text style={styles.haveAccountText}>Login</Text>
+							</Pressable>
+						</View>
+					</KeyboardAvoidingView>
+				</ImageBackground>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	background: {
 		flex: 1,
 		justifyContent: "flex-end",
 	},
-	container: {
+	innerContainer: {
 		marginTop: "auto",
 		backgroundColor: "#fff",
 		paddingHorizontal: 16,

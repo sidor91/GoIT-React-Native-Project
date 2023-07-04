@@ -1,26 +1,20 @@
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
-
 import { NavigationContainer } from "@react-navigation/native";
 import "react-native-gesture-handler";
 import { useCallback } from "react";
-import {
-	StyleSheet,
-	View,
-	TouchableWithoutFeedback,
-	Keyboard,
-	Pressable,
-	Image,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Provider } from "react-redux";
 
 import useRoute from './router'
-
+import { store } from "./redux/store";
 
 SplashScreen.preventAutoHideAsync();
 
 
 export default function App() {
+
+
 	const [fontsLoaded] = useFonts({
 		"Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
 		"Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -38,29 +32,21 @@ export default function App() {
 
 	const routing = useRoute(true)
 
-	const onKeyboardClose = () => {
-		Keyboard.dismiss();
-	};
 
 	return (
-		<TouchableWithoutFeedback
-			onPress={onKeyboardClose}
-			onLayout={onLayoutRootView}
-		>
-			<View style={styles.container}>
-				<NavigationContainer>
-					{routing}
-				</NavigationContainer>
-				<StatusBar style="auto" />
+		<Provider store={store}>
+			<View
+				onLayout={onLayoutRootView}
+				style={styles.container}>
+				<NavigationContainer>{routing}</NavigationContainer>
 			</View>
-		</TouchableWithoutFeedback>
+		</Provider>
 	);
 }
+
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
 });
-
-

@@ -6,8 +6,10 @@ import {
 	Text,
 	Pressable,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	KeyboardAvoidingView,
 	Platform,
+	Keyboard,
 	ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -34,7 +36,16 @@ export default function LoginScreen() {
 		setisKeyboardShown(false);
 	};
 
+		const onKeyboardClose = () => {
+			Keyboard.dismiss();
+		};
+
 	return (
+		<TouchableWithoutFeedback
+			onPress={onKeyboardClose}
+			// onLayout={onLayoutRootView}
+		>
+			<View style={styles.container}>
 		<ImageBackground
 			source={require("../../assets/wallpapers.png")}
 			resizeMode="cover"
@@ -42,7 +53,7 @@ export default function LoginScreen() {
 		>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === "ios" && "padding"}
-				style={styles.container}
+				style={styles.innerContainer}
 			>
 				<Text style={styles.formTitle}>Login</Text>
 				<View style={styles.form}>
@@ -129,16 +140,21 @@ export default function LoginScreen() {
 					</Pressable>
 				</View>
 			</KeyboardAvoidingView>
-		</ImageBackground>
+				</ImageBackground>
+			</View>
+			</TouchableWithoutFeedback>
 	);
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	background: {
 		flex: 1,
 		justifyContent: "flex-end",
 	},
-	container: {
+	innerContainer: {
 		marginTop: "auto",
 		backgroundColor: "#fff",
 		paddingHorizontal: 16,
