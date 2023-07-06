@@ -1,13 +1,5 @@
 {
-	"jsEngine": "hermes",
-	"ios": {
-		"jsEngine": "jsc",
-		"supportsTablet": true
-	},
-	"android": {
-		"jsEngine": "jsc",
-		"supportsTablet": true
-	},
+	
 	
 	"expo": {
 		"name": "myNewProject",
@@ -33,6 +25,15 @@
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
+		},
+		"jsEngine": "hermes",
+		"ios": {
+			"jsEngine": "jsc",
+			"supportsTablet": true
+		},
+		"android": {
+			"jsEngine": "jsc",
+			"supportsTablet": true
 		}
 	}
 }

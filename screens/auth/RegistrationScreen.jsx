@@ -14,6 +14,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { signupUser } from "../../redux/auth/authOperations";
+// import { useAuth } from "../../utilites/hooks/useAuth";
 
 
 const initialCredentials = {
@@ -29,7 +32,10 @@ export default function RegistrationScreen() {
 	const [isLoginActive, setIsLoginActive] = useState(false);
 	const [isEmailActive, setIsEmailActive] = useState(false);
 	const [isPasswordActive, setIsPasswordActive] = useState(false);
+	// const { isRegisterFailed } = useAuth();
 
+
+	const dispatch = useDispatch();
 	const navigation = useNavigation();
 
 	const togglePasswordSecure = () => {
@@ -42,6 +48,11 @@ export default function RegistrationScreen() {
 
 	const onKeyboardClose = () => {
 		Keyboard.dismiss();
+	};
+
+	const submitForm = () => {
+		dispatch(signupUser(credentials));
+		setCredentials(initialCredentials);
 	};
 
 	return (
@@ -58,8 +69,8 @@ export default function RegistrationScreen() {
 					<KeyboardAvoidingView
 						behavior={Platform.OS === "ios" ? "padding" : "height"}
 						style={styles.innerContainer}
-					>
-						<View style={styles.photoContainer}>
+					> 
+							<View style={styles.photoContainer}>
 							<Ionicons
 								name="add-circle-outline"
 								size={25}
@@ -149,14 +160,7 @@ export default function RegistrationScreen() {
 								</Pressable>
 							</View>
 						</View>
-						<TouchableOpacity
-							style={styles.button}
-							onPress={() =>
-								console.log(
-									`Login: ${credentials.login} Email: ${credentials.email} Password: ${credentials.password}`
-								)
-							}
-						>
+						<TouchableOpacity style={styles.button} onPress={submitForm}>
 							<Text style={styles.buttonText}>Sign up</Text>
 						</TouchableOpacity>
 						<View
@@ -171,7 +175,7 @@ export default function RegistrationScreen() {
 							<Pressable onPress={() => navigation.navigate("Login")}>
 								<Text style={styles.haveAccountText}>Login</Text>
 							</Pressable>
-						</View>
+							</View>
 					</KeyboardAvoidingView>
 				</ImageBackground>
 			</View>

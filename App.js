@@ -5,9 +5,10 @@ import "react-native-gesture-handler";
 import { useCallback } from "react";
 import { View, StyleSheet } from "react-native";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 import useRoute from './router'
-import { store } from "./redux/store";
+import { store, persistor } from "./redux/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,16 +31,16 @@ export default function App() {
 		return null;
 	}
 
-	const routing = useRoute(true)
+	const routing = useRoute(false)
 
 
 	return (
 		<Provider store={store}>
-			<View
-				onLayout={onLayoutRootView}
-				style={styles.container}>
-				<NavigationContainer>{routing}</NavigationContainer>
-			</View>
+			<PersistGate loading={null} persistor={persistor}>
+				<View onLayout={onLayoutRootView} style={styles.container}>
+					<NavigationContainer>{routing}</NavigationContainer>
+				</View>
+			</PersistGate>
 		</Provider>
 	);
 }
